@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package todo;
+
+option go_package = ".;todo";
+
+service TodoService {
+    rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
+}
+
+message CreateTodoRequest {
+    string title = 1;
+    string text = 2;
+}
+
+message CreateTodoResponse {
+    string title = 1;
+    string text = 2;
+}
