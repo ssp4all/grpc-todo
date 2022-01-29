@@ -9,19 +9,22 @@ import (
 	//import grpc
 	"google.golang.org/grpc"
 	//import protobuf
-	pb "example.com/grpc-demo/todos"
+	pb "github.com/ssp4all/grpc-todo/todos"
 	"log"
 	"net"
 
 )
 
-type Server struct{}
-		
+type Server struct{
+	pb.UnimplementedTodoServiceServer //to avoid *Server does not implement todo.TodoServiceServer (missing todo.mustEmbedUnimplementedTodoServiceServer method)
+	
+}
+
 // CreateTodo implements TodoService.CreateTodo
 func (s *Server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
 	fmt.Println("CreateTodo")
 	return &pb.CreateTodoResponse{
-		Id: req.Title,
+		Title: req.Title,
 		Text: req.Text,
 	}, nil
 }

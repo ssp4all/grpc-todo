@@ -25,4 +25,10 @@ assuming you are in project dir
 - `go mod tidy` 
 - `go run server.go`
 - `go run client.go` 
-- 
+
+
+
+Replace path in go mod 
+`go mod edit -replace example.com/grpc-demo=github.com/ssp4all/grpc-demo`
+
+init go project `go mod init github.com/ssp4all/grpc-todo`
