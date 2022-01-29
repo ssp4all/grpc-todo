@@ -14,3 +14,5 @@ require (
 	golang.org/x/text v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 )
+
+replace github.com/ssp4all/grpc-todo => /home/suraj/Documents/go-practice/grpc-demo
