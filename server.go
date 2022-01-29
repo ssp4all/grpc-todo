@@ -15,14 +15,21 @@ import (
 
 )
 
-type Server struct{
-	pb.UnimplementedTodoServiceServer //to avoid *Server does not implement todo.TodoServiceServer (missing todo.mustEmbedUnimplementedTodoServiceServer method)
-	
+type Server interface {
+	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error)
+}
+
+
+
+type ToDoServer struct {
+	pb.UnimplementedTodoServiceServer
 }
 
 // CreateTodo implements TodoService.CreateTodo
-func (s *Server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
+func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
 	fmt.Println("CreateTodo")
+	//log request content
+	log.Println("CreateTodo: %s\n%s", req.Title, req.Text)
 	return &pb.CreateTodoResponse{
 		Title: req.Title,
 		Text: req.Text,
@@ -39,7 +46,7 @@ func main(){
 	//init server
 	server := grpc.NewServer()
 	//register service
-	pb.RegisterTodoServiceServer(server, &Server{})
+	pb.RegisterTodoServiceServer(server, &ToDoServer{})
 	log.Println("server started")
 
 	//start server
