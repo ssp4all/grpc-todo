@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodoServiceClient interface {
-	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error)
+	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*Todo, error)
 	GetAllTodos(ctx context.Context, in *GetAllTodosRequest, opts ...grpc.CallOption) (*GetAllTodosResponse, error)
 }
 
@@ -30,8 +30,8 @@ func NewTodoServiceClient(cc grpc.ClientConnInterface) TodoServiceClient {
 	return &todoServiceClient{cc}
 }
 
-func (c *todoServiceClient) CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error) {
-	out := new(CreateTodoResponse)
+func (c *todoServiceClient) CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*Todo, error) {
+	out := new(Todo)
 	err := c.cc.Invoke(ctx, "/todos.TodoService/CreateTodo", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *todoServiceClient) GetAllTodos(ctx context.Context, in *GetAllTodosRequ
 // All implementations must embed UnimplementedTodoServiceServer
 // for forward compatibility
 type TodoServiceServer interface {
-	CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error)
+	CreateTodo(context.Context, *CreateTodoRequest) (*Todo, error)
 	GetAllTodos(context.Context, *GetAllTodosRequest) (*GetAllTodosResponse, error)
 	mustEmbedUnimplementedTodoServiceServer()
 }
@@ -61,7 +61,7 @@ type TodoServiceServer interface {
 type UnimplementedTodoServiceServer struct {
 }
 
-func (UnimplementedTodoServiceServer) CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error) {
+func (UnimplementedTodoServiceServer) CreateTodo(context.Context, *CreateTodoRequest) (*Todo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTodo not implemented")
 }
 func (UnimplementedTodoServiceServer) GetAllTodos(context.Context, *GetAllTodosRequest) (*GetAllTodosResponse, error) {

@@ -13,14 +13,42 @@ import (
 )
 
 type Server interface {
-	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error)
+	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.Todo, error)
 	GetAllTodos(context.Context, *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
+	Run()
 }
 
 
 type ToDoServer struct {
-	pb.UnimplementedTodoServiceServer
+	pb.UnimplementedTodoServiceServer  //for forward compatibility
 	// todo_list *pb.GetAllTodoResponse
+}
+
+func NewToDoServer() *ToDoServer {
+	return &ToDoServer{
+		// todo_list: &pb.Todo{},
+	}
+}
+
+func (s *ToDoServer) Run() error {
+	//listen to port 50051
+	fmt.Println("listening on port 50051")
+	listener, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	//init server
+	server := grpc.NewServer()
+	//register service
+	pb.RegisterTodoServiceServer(server, &ToDoServer{})
+	log.Println("server started")
+
+	//start server
+	if err := server.Serve(listener); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+
+	return nil
 }
 
 func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error) {
@@ -45,7 +73,7 @@ func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest
 
 
 // CreateTodo implements TodoService.CreateTodo
-func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
+func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.Todo, error) {
 	//log request content
 	log.Printf("\nCreateTodo: %s\n%s", req.Title, req.Text)
 
@@ -59,7 +87,7 @@ func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) 
 	// })
 
 
-	return &pb.CreateTodoResponse{
+	return &pb.Todo{
 		Id: id,
 		Title: req.Title,
 		Text: req.Text,
@@ -68,20 +96,10 @@ func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) 
 
 
 func main(){
-	//listen to port 50051
-	fmt.Println("listening on port 50051")
-	listener, err := net.Listen("tcp", ":50051")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
 	//init server
-	server := grpc.NewServer()
-	//register service
-	pb.RegisterTodoServiceServer(server, &ToDoServer{})
-	log.Println("server started")
-
+	server := NewToDoServer()
 	//start server
-	if err := server.Serve(listener); err != nil {
+	if err := server.Run(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 

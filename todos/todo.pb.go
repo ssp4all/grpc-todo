@@ -75,69 +75,6 @@ func (x *CreateTodoRequest) GetText() string {
 	return ""
 }
 
-type CreateTodoResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id    int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Text  string `protobuf:"bytes,3,opt,name=text,proto3" json:"text,omitempty"`
-}
-
-func (x *CreateTodoResponse) Reset() {
-	*x = CreateTodoResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_todos_todo_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CreateTodoResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateTodoResponse) ProtoMessage() {}
-
-func (x *CreateTodoResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_todos_todo_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateTodoResponse.ProtoReflect.Descriptor instead.
-func (*CreateTodoResponse) Descriptor() ([]byte, []int) {
-	return file_todos_todo_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateTodoResponse) GetId() int32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *CreateTodoResponse) GetTitle() string {
-	if x != nil {
-		return x.Title
-	}
-	return ""
-}
-
-func (x *CreateTodoResponse) GetText() string {
-	if x != nil {
-		return x.Text
-	}
-	return ""
-}
-
 type GetAllTodosRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -147,7 +84,7 @@ type GetAllTodosRequest struct {
 func (x *GetAllTodosRequest) Reset() {
 	*x = GetAllTodosRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_todos_todo_proto_msgTypes[2]
+		mi := &file_todos_todo_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -160,7 +97,7 @@ func (x *GetAllTodosRequest) String() string {
 func (*GetAllTodosRequest) ProtoMessage() {}
 
 func (x *GetAllTodosRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_todos_todo_proto_msgTypes[2]
+	mi := &file_todos_todo_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -173,7 +110,7 @@ func (x *GetAllTodosRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllTodosRequest.ProtoReflect.Descriptor instead.
 func (*GetAllTodosRequest) Descriptor() ([]byte, []int) {
-	return file_todos_todo_proto_rawDescGZIP(), []int{2}
+	return file_todos_todo_proto_rawDescGZIP(), []int{1}
 }
 
 type Todo struct {
@@ -189,7 +126,7 @@ type Todo struct {
 func (x *Todo) Reset() {
 	*x = Todo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_todos_todo_proto_msgTypes[3]
+		mi := &file_todos_todo_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -202,7 +139,7 @@ func (x *Todo) String() string {
 func (*Todo) ProtoMessage() {}
 
 func (x *Todo) ProtoReflect() protoreflect.Message {
-	mi := &file_todos_todo_proto_msgTypes[3]
+	mi := &file_todos_todo_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -215,7 +152,7 @@ func (x *Todo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Todo.ProtoReflect.Descriptor instead.
 func (*Todo) Descriptor() ([]byte, []int) {
-	return file_todos_todo_proto_rawDescGZIP(), []int{3}
+	return file_todos_todo_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Todo) GetId() int32 {
@@ -250,7 +187,7 @@ type GetAllTodosResponse struct {
 func (x *GetAllTodosResponse) Reset() {
 	*x = GetAllTodosResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_todos_todo_proto_msgTypes[4]
+		mi := &file_todos_todo_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -263,7 +200,7 @@ func (x *GetAllTodosResponse) String() string {
 func (*GetAllTodosResponse) ProtoMessage() {}
 
 func (x *GetAllTodosResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_todos_todo_proto_msgTypes[4]
+	mi := &file_todos_todo_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +213,7 @@ func (x *GetAllTodosResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllTodosResponse.ProtoReflect.Descriptor instead.
 func (*GetAllTodosResponse) Descriptor() ([]byte, []int) {
-	return file_todos_todo_proto_rawDescGZIP(), []int{4}
+	return file_todos_todo_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetAllTodosResponse) GetTodos() []*Todo {
@@ -294,11 +231,6 @@ var file_todos_todo_proto_rawDesc = []byte{
 	0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14,
 	0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,
 	0x69, 0x74, 0x6c, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x78, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x74, 0x65, 0x78, 0x74, 0x22, 0x4e, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e,
-	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x14,
-	0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,
-	0x69, 0x74, 0x6c, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x78, 0x74, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x04, 0x74, 0x65, 0x78, 0x74, 0x22, 0x14, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x41,
 	0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x40,
 	0x0a, 0x04, 0x54, 0x6f, 0x64, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
@@ -308,18 +240,17 @@ var file_todos_todo_proto_rawDesc = []byte{
 	0x22, 0x38, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x05, 0x74, 0x6f, 0x64, 0x6f, 0x73,
 	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x2e, 0x54,
-	0x6f, 0x64, 0x6f, 0x52, 0x05, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x32, 0x9a, 0x01, 0x0a, 0x0b, 0x54,
-	0x6f, 0x64, 0x6f, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x43, 0x0a, 0x0a, 0x43, 0x72,
+	0x6f, 0x64, 0x6f, 0x52, 0x05, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x32, 0x8c, 0x01, 0x0a, 0x0b, 0x54,
+	0x6f, 0x64, 0x6f, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x35, 0x0a, 0x0a, 0x43, 0x72,
 	0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x12, 0x18, 0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73,
 	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x19, 0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
-	0x46, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x12, 0x19,
-	0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64,
-	0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x74, 0x6f, 0x64, 0x6f,
-	0x73, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x3b, 0x74, 0x6f, 0x64,
-	0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x64, 0x6f, 0x22,
+	0x00, 0x12, 0x46, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73,
+	0x12, 0x19, 0x2e, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54,
+	0x6f, 0x64, 0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x74, 0x6f,
+	0x64, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x3b, 0x74,
+	0x6f, 0x64, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -334,20 +265,19 @@ func file_todos_todo_proto_rawDescGZIP() []byte {
 	return file_todos_todo_proto_rawDescData
 }
 
-var file_todos_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_todos_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_todos_todo_proto_goTypes = []interface{}{
 	(*CreateTodoRequest)(nil),   // 0: todos.CreateTodoRequest
-	(*CreateTodoResponse)(nil),  // 1: todos.CreateTodoResponse
-	(*GetAllTodosRequest)(nil),  // 2: todos.GetAllTodosRequest
-	(*Todo)(nil),                // 3: todos.Todo
-	(*GetAllTodosResponse)(nil), // 4: todos.GetAllTodosResponse
+	(*GetAllTodosRequest)(nil),  // 1: todos.GetAllTodosRequest
+	(*Todo)(nil),                // 2: todos.Todo
+	(*GetAllTodosResponse)(nil), // 3: todos.GetAllTodosResponse
 }
 var file_todos_todo_proto_depIdxs = []int32{
-	3, // 0: todos.GetAllTodosResponse.todos:type_name -> todos.Todo
+	2, // 0: todos.GetAllTodosResponse.todos:type_name -> todos.Todo
 	0, // 1: todos.TodoService.CreateTodo:input_type -> todos.CreateTodoRequest
-	2, // 2: todos.TodoService.GetAllTodos:input_type -> todos.GetAllTodosRequest
-	1, // 3: todos.TodoService.CreateTodo:output_type -> todos.CreateTodoResponse
-	4, // 4: todos.TodoService.GetAllTodos:output_type -> todos.GetAllTodosResponse
+	1, // 2: todos.TodoService.GetAllTodos:input_type -> todos.GetAllTodosRequest
+	2, // 3: todos.TodoService.CreateTodo:output_type -> todos.Todo
+	3, // 4: todos.TodoService.GetAllTodos:output_type -> todos.GetAllTodosResponse
 	3, // [3:5] is the sub-list for method output_type
 	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -374,18 +304,6 @@ func file_todos_todo_proto_init() {
 			}
 		}
 		file_todos_todo_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateTodoResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_todos_todo_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetAllTodosRequest); i {
 			case 0:
 				return &v.state
@@ -397,7 +315,7 @@ func file_todos_todo_proto_init() {
 				return nil
 			}
 		}
-		file_todos_todo_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_todos_todo_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Todo); i {
 			case 0:
 				return &v.state
@@ -409,7 +327,7 @@ func file_todos_todo_proto_init() {
 				return nil
 			}
 		}
-		file_todos_todo_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_todos_todo_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetAllTodosResponse); i {
 			case 0:
 				return &v.state
@@ -428,7 +346,7 @@ func file_todos_todo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_todos_todo_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
