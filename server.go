@@ -1,107 +1,57 @@
-//server code for todo app 
-
-package main 
+package main
 
 import (
 	"context"
-	"fmt"
-	"google.golang.org/grpc"
-	pb "github.com/ssp4all/grpc-todo/todos"
 	"log"
+	"math/rand"
 	"net"
 
+	pb "github.com/ssp4all/grpc-todo/todos"
+	"google.golang.org/grpc"
 )
 
-type Server interface {
-	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.Todo, error)
-	GetAllTodos(context.Context, *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
-	Run()
-}
-
-
-type ToDoServer struct {
-	pb.UnimplementedTodoServiceServer  //for forward compatibility
-	// todo_list *pb.GetAllTodoResponse
-}
+const (
+	port = ":50051"
+)
 
 func NewToDoServer() *ToDoServer {
 	return &ToDoServer{
-		// todo_list: &pb.Todo{},
+		todo_list: &pb.GetAllTodosResponse{},
 	}
 }
 
-func (s *ToDoServer) Run() error {
-	//listen to port 50051
-	fmt.Println("listening on port 50051")
-	listener, err := net.Listen("tcp", ":50051")
+type ToDoServer struct {
+	pb.UnimplementedTodoServiceServer
+	todo_list *pb.GetAllTodosResponse
+}
+
+func (server *ToDoServer) Run() error {
+	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	//init server
-	server := grpc.NewServer()
-	//register service
-	pb.RegisterTodoServiceServer(server, &ToDoServer{})
-	log.Println("server started")
 
-	//start server
-	if err := server.Serve(listener); err != nil {
+	s := grpc.NewServer()
+	pb.RegisterTodoServiceServer(s, server)
+	log.Printf("server listening at %v", lis.Addr())
+	return s.Serve(lis)
+}
+
+func (server *ToDoServer) CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.Todo, error) {
+	log.Printf("Received: %v", in.GetTitle())
+	var todo_id = int32(rand.Intn(100))
+	created_todo := &pb.Todo{Title: in.GetTitle(), Text: in.GetText(), Id: todo_id}
+	server.todo_list.Todos = append(server.todo_list.Todos, created_todo)
+	return created_todo, nil
+}
+
+func (server *ToDoServer) GetAllTodos(ctx context.Context, in *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error) {
+	return server.todo_list, nil
+}
+
+func main() {
+	var todo_server *ToDoServer = NewToDoServer()
+	if err := todo_server.Run(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
-
-	return nil
-}
-
-func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error) {
-	log.Println("GetAllTodos")
-	toDoList := pb.GetAllTodosResponse{
-		Todos: []*pb.Todo{
-			&pb.Todo{
-				Id: 1,
-				Title: "Laundry",
-				Text: "Do laundry",
-			},
-			&pb.Todo{
-				Id: 2,
-				Title: "Study",
-				Text: "Do study",
-			},
-		},
-	}
-	log.Println("GetAllTodos: ", toDoList)
-	return &toDoList, nil
-}
-
-
-// CreateTodo implements TodoService.CreateTodo
-func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.Todo, error) {
-	//log request content
-	log.Printf("\nCreateTodo: %s\n%s", req.Title, req.Text)
-
-	// id := len(s.todo_list.ToDos) + 1 //assign id to new todo
-	id := int32(11)
-	//append todo into allToDos
-	// s.todo_list = append(s.todo_list, &pb.ToDo{
-	// 	Id: id,
-	// 	Title: req.Title,
-	// 	Text: req.Text,
-	// })
-
-
-	return &pb.Todo{
-		Id: id,
-		Title: req.Title,
-		Text: req.Text,
-	}, nil
-}
-
-
-func main(){
-	//init server
-	server := NewToDoServer()
-	//start server
-	if err := server.Run(); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
-	
 }
