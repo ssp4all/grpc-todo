@@ -14,6 +14,12 @@ const (
 	port = ":50051"
 )
 
+type Server interface {
+	CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.Todo, error)
+	GetAllTodos(ctx context.Context, in *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
+	Run() error
+}
+
 func NewToDoServer() *ToDoServer {
 	return &ToDoServer{
 		todo_list: &pb.GetAllTodosResponse{},
