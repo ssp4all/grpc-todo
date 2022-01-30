@@ -31,7 +31,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("\nCreated todo: %s\n %s\n%s", r.Id, r.Title, r.Text)
+	log.Printf("\nCreated todo: %s\n %s\n%s", r.GetId(), r.GetTitle(), r.GetText())
 
 	rr, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{
 		Title: "Study",
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	//log response
-	log.Printf("\nCreated todo: %s\n %s\n%s", rr.Id, rr.Title, rr.Text)
+	log.Printf("\nCreated todo: %s\n %s\n%s", rr.GetId(), rr.GetTitle(), rr.GetText())
 
 
 	//use getToDo by id 1 

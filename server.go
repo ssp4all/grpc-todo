@@ -9,24 +9,26 @@ import (
 	pb "github.com/ssp4all/grpc-todo/todos"
 	"log"
 	"net"
-
+	"math/rand"
 )
 
 type Server interface {
-	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.Todo, error)
-	GetAllTodos(context.Context, *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
+	CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.Todo, error)
+	GetAllTodos(ctx context.Context, in *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
 	Run()
 }
 
 
 type ToDoServer struct {
 	pb.UnimplementedTodoServiceServer  //for forward compatibility
-	// todo_list *pb.GetAllTodoResponse
+	todo_list *pb.GetAllTodosResponse
 }
 
 func NewToDoServer() *ToDoServer {
+	//log new server init 
+	log.Println("NewToDoServer init")
 	return &ToDoServer{
-		// todo_list: &pb.Todo{},
+		todo_list: &pb.GetAllTodosResponse{},
 	}
 }
 
@@ -53,51 +55,69 @@ func (s *ToDoServer) Run() error {
 
 func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error) {
 	log.Println("GetAllTodos")
-	toDoList := pb.GetAllTodosResponse{
-		Todos: []*pb.Todo{
-			&pb.Todo{
-				Id: 1,
-				Title: "Laundry",
-				Text: "Do laundry",
-			},
-			&pb.Todo{
-				Id: 2,
-				Title: "Study",
-				Text: "Do study",
-			},
-		},
+	//check for null todo_list
+	if s.todo_list == nil {
+		//return error
+		return nil, fmt.Errorf("todo_list is null")
 	}
-	log.Println("GetAllTodos: ", toDoList)
-	return &toDoList, nil
+	return s.todo_list, nil
+
+	// toDoList := pb.GetAllTodosResponse{
+	// 	Todos: []*pb.Todo{
+	// 		&pb.Todo{
+	// 			Id: 1,
+	// 			Title: "Laundry",
+	// 			Text: "Do laundry",
+	// 		},
+	// 		&pb.Todo{
+	// 			Id: 2,
+	// 			Title: "Study",
+	// 			Text: "Do study",
+	// 		},
+	// 	},
+	// }
+	// log.Println("GetAllTodos: ", toDoList)
+	// return &toDoList, nil
 }
 
 
 // CreateTodo implements TodoService.CreateTodo
 func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.Todo, error) {
+	log.Println("CreateTodo")
+
+	//check for null request
+	// if req == nil {
+	// 	return nil, fmt.Errorf("request is nil")
+	// }
+
+	//check for empty  todo_list 
+	if s.todo_list == nil {
+		log.Println("todo_list is null")
+		//init todo_list
+		s.todo_list = &pb.GetAllTodosResponse{}
+	}
+
 	//log request content
-	log.Printf("\nCreateTodo: %s\n%s", req.Title, req.Text)
+	log.Printf("\nCreateTodo: %s\n%s", req.GetTitle(), req.GetText())
 
-	// id := len(s.todo_list.ToDos) + 1 //assign id to new todo
-	id := int32(11)
-	//append todo into allToDos
-	// s.todo_list = append(s.todo_list, &pb.ToDo{
-	// 	Id: id,
-	// 	Title: req.Title,
-	// 	Text: req.Text,
-	// })
-
-
-	return &pb.Todo{
-		Id: id,
-		Title: req.Title,
-		Text: req.Text,
-	}, nil
+	//create new todo
+	todo := &pb.Todo{
+		Id: rand.Int31(), //int32
+		Title: req.GetTitle(),
+		Text: req.GetText(),
+	}
+	//add todo to list
+	log.Println("pushing todo to list")
+	s.todo_list.Todos = append(s.todo_list.Todos, todo)
+	return todo, nil
 }
 
 
 func main(){
 	//init server
 	server := NewToDoServer()
+	//log todolist size 
+	log.Printf("todo_list size: %d", len(server.todo_list.Todos))
 	//start server
 	if err := server.Run(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
