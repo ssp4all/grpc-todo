@@ -42,7 +42,7 @@ func (s *ToDoServer) Run() error {
 	//init server
 	server := grpc.NewServer()
 	//register service
-	pb.RegisterTodoServiceServer(server, &ToDoServer{})
+	pb.RegisterTodoServiceServer(server, s)
 	log.Println("server started")
 
 	//start server
@@ -85,17 +85,12 @@ func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest
 func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.Todo, error) {
 	log.Println("CreateTodo")
 
-	//check for null request
-	// if req == nil {
-	// 	return nil, fmt.Errorf("request is nil")
-	// }
-
 	//check for empty  todo_list 
-	if s.todo_list == nil {
-		log.Println("todo_list is null")
-		//init todo_list
-		s.todo_list = &pb.GetAllTodosResponse{}
-	}
+	// if s.todo_list == nil {
+	// 	log.Println("todo_list is null")
+	// 	//init todo_list
+	// 	s.todo_list = &pb.GetAllTodosResponse{}
+	// }
 
 	//log request content
 	log.Printf("\nCreateTodo: %s\n%s", req.GetTitle(), req.GetText())
