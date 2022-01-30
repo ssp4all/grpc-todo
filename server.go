@@ -13,9 +13,10 @@ import (
 )
 
 type Server interface {
-	CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.Todo, error)
-	GetAllTodos(ctx context.Context, in *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
+	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.Todo, error)
+	GetAllTodos(context.Context, *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
 	Run()
+	StreamTodos(*pb.GetAllTodosRequest, pb.TodoService_StreamTodosServer) error
 }
 
 
@@ -23,6 +24,19 @@ type ToDoServer struct {
 	pb.UnimplementedTodoServiceServer  //for forward compatibility
 	todo_list *pb.GetAllTodosResponse
 }
+
+//implement streamTodos
+func (s *ToDoServer) StreamTodos(in *pb.GetAllTodosRequest, req pb.TodoService_StreamTodosServer) error {
+	log.Println("StreamTodos")
+	//stream todolist to client
+	for _, todo := range s.todo_list.Todos {
+		if err := req.Send(todo); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 
 func NewToDoServer() *ToDoServer {
 	//log new server init 

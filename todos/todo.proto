@@ -7,7 +7,7 @@ option go_package = ".;todos";
 service TodoService {
     rpc CreateTodo(CreateTodoRequest) returns (Todo) {}
     rpc GetAllTodos(GetAllTodosRequest) returns (GetAllTodosResponse) {}
-
+    rpc StreamTodos(GetAllTodosRequest) returns (stream Todo) {}
 }
 
 message CreateTodoRequest {

@@ -53,4 +53,21 @@ func main() {
 	}
 	log.Printf("\n All todos are : %s", rrr.Todos)
 
+
+	log.Println("\n Get all StreamTodos")
+	//implement StreamTodos
+	stream, err := c.StreamTodos(context.Background(), &pb.GetAllTodosRequest{})
+	if err != nil {
+		log.Fatalf("could not found todos due to %v", err)
+	}
+	//read from stream 
+	for {
+		todo, err := stream.Recv()
+		if err != nil {
+			log.Fatalf("could not found todos due to %v", err)
+		}
+		log.Printf("\n Stream todo: %s\n %s\n%s", todo.GetId(), todo.GetTitle(), todo.GetText())
+	}
+
+
 }

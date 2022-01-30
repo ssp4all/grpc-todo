@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type TodoServiceClient interface {
 	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*Todo, error)
 	GetAllTodos(ctx context.Context, in *GetAllTodosRequest, opts ...grpc.CallOption) (*GetAllTodosResponse, error)
+	StreamTodos(ctx context.Context, in *GetAllTodosRequest, opts ...grpc.CallOption) (TodoService_StreamTodosClient, error)
 }
 
 type todoServiceClient struct {
@@ -48,12 +49,45 @@ func (c *todoServiceClient) GetAllTodos(ctx context.Context, in *GetAllTodosRequ
 	return out, nil
 }
 
+func (c *todoServiceClient) StreamTodos(ctx context.Context, in *GetAllTodosRequest, opts ...grpc.CallOption) (TodoService_StreamTodosClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TodoService_ServiceDesc.Streams[0], "/todos.TodoService/StreamTodos", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &todoServiceStreamTodosClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TodoService_StreamTodosClient interface {
+	Recv() (*Todo, error)
+	grpc.ClientStream
+}
+
+type todoServiceStreamTodosClient struct {
+	grpc.ClientStream
+}
+
+func (x *todoServiceStreamTodosClient) Recv() (*Todo, error) {
+	m := new(Todo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TodoServiceServer is the server API for TodoService service.
 // All implementations must embed UnimplementedTodoServiceServer
 // for forward compatibility
 type TodoServiceServer interface {
 	CreateTodo(context.Context, *CreateTodoRequest) (*Todo, error)
 	GetAllTodos(context.Context, *GetAllTodosRequest) (*GetAllTodosResponse, error)
+	StreamTodos(*GetAllTodosRequest, TodoService_StreamTodosServer) error
 	mustEmbedUnimplementedTodoServiceServer()
 }
 
@@ -66,6 +100,9 @@ func (UnimplementedTodoServiceServer) CreateTodo(context.Context, *CreateTodoReq
 }
 func (UnimplementedTodoServiceServer) GetAllTodos(context.Context, *GetAllTodosRequest) (*GetAllTodosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTodos not implemented")
+}
+func (UnimplementedTodoServiceServer) StreamTodos(*GetAllTodosRequest, TodoService_StreamTodosServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamTodos not implemented")
 }
 func (UnimplementedTodoServiceServer) mustEmbedUnimplementedTodoServiceServer() {}
 
@@ -116,6 +153,27 @@ func _TodoService_GetAllTodos_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TodoService_StreamTodos_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetAllTodosRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TodoServiceServer).StreamTodos(m, &todoServiceStreamTodosServer{stream})
+}
+
+type TodoService_StreamTodosServer interface {
+	Send(*Todo) error
+	grpc.ServerStream
+}
+
+type todoServiceStreamTodosServer struct {
+	grpc.ServerStream
+}
+
+func (x *todoServiceStreamTodosServer) Send(m *Todo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // TodoService_ServiceDesc is the grpc.ServiceDesc for TodoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -132,6 +190,12 @@ var TodoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TodoService_GetAllTodos_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamTodos",
+			Handler:       _TodoService_StreamTodos_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "todos/todo.proto",
 }
