@@ -1,12 +1,13 @@
 syntax = "proto3";
 
-package todo;
+package todos;
 
-option go_package = ".;todo";
+option go_package = ".;todos";
 
 service TodoService {
     rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
-    rpc GetTodo(GetTodoRequest) returns (GetTodoResponse) {}
+    rpc GetAllTodos(GetAllTodosRequest) returns (GetAllTodosResponse) {}
+
 }
 
 message CreateTodoRequest {
@@ -15,27 +16,20 @@ message CreateTodoRequest {
 }
 
 message CreateTodoResponse {
-    int64 id = 1;
+    int32 id = 1;
     string title = 2;
     string text = 3;
 }
 
-message GetTodoRequest {
-    int64 id = 1;
-}
-
-message GetTodoResponse {
-    int64 id = 1;
-    string title = 2;
-    string text = 3;
+message GetAllTodosRequest {
 }
 
 message Todo {
-    int64 id = 1;
+    int32 id = 1;
     string title = 2;
     string text = 3;
 }
 
-message allToDos {
+message GetAllTodosResponse {
     repeated Todo todos = 1;
-}   
+}

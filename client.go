@@ -31,9 +31,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Created todo: %s\n%s", r.Title, r.Text)
+	log.Printf("\nCreated todo: %s\n %s\n%s", r.Id, r.Title, r.Text)
 
-	r, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{
+	rr, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{
 		Title: "Study",
 		Text: "Do study",
 	})
@@ -42,18 +42,15 @@ func main() {
 	}
 
 	//log response
-	log.Printf("Created todo: %s\n%s", r.Title, r.Text)
+	log.Printf("\nCreated todo: %s\n %s\n%s", rr.Id, rr.Title, rr.Text)
 
 
 	//use getToDo by id 1 
-	log.Println("GetToDo")
-	r, err = c.GetToDo(context.Background(), &pb.GetToDoRequest{
-		Id: 1,
-	})
+	log.Println("\n\n FEtching all todos")
+	rrr, err := c.GetAllTodos(context.Background(), &pb.GetAllTodosRequest{})
 	if err != nil {
-		log.Fatalf("could not found todo by id %v", err)
+		log.Fatalf("could not found todos due to %v", err)
 	}
-	log.Printf("Found todo: %s\n%s", r.Title, r.Text)
-	
+	log.Printf("\n All todos are : %s", rrr.Todos)
 
 }

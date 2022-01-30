@@ -5,10 +5,7 @@ package main
 import (
 	"context"
 	"fmt"
-	// "time"
-	//import grpc
 	"google.golang.org/grpc"
-	//import protobuf
 	pb "github.com/ssp4all/grpc-todo/todos"
 	"log"
 	"net"
@@ -17,31 +14,49 @@ import (
 
 type Server interface {
 	CreateTodo(context.Context, *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error)
-	GetToDo(context.Context, *pb.GetToDoRequest) (*pb.GetToDoResponse, error)
+	GetAllTodos(context.Context, *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error)
 }
-
 
 
 type ToDoServer struct {
 	pb.UnimplementedTodoServiceServer
-	todo_list *pb.allToDos
+	// todo_list *pb.GetAllTodoResponse
+}
+
+func (s *ToDoServer) GetAllTodos(ctx context.Context, req *pb.GetAllTodosRequest) (*pb.GetAllTodosResponse, error) {
+	log.Println("GetAllTodos")
+	toDoList := pb.GetAllTodosResponse{
+		Todos: []*pb.Todo{
+			&pb.Todo{
+				Id: 1,
+				Title: "Laundry",
+				Text: "Do laundry",
+			},
+			&pb.Todo{
+				Id: 2,
+				Title: "Study",
+				Text: "Do study",
+			},
+		},
+	}
+	log.Println("GetAllTodos: ", toDoList)
+	return &toDoList, nil
 }
 
 
 // CreateTodo implements TodoService.CreateTodo
 func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
-	fmt.Println("CreateTodo")
 	//log request content
-	log.Println("CreateTodo: %s\n%s", req.Title, req.Text)
+	log.Printf("\nCreateTodo: %s\n%s", req.Title, req.Text)
 
-	id := len(s.todo_list.ToDos) + 1 //assign id to new todo
-
+	// id := len(s.todo_list.ToDos) + 1 //assign id to new todo
+	id := int32(11)
 	//append todo into allToDos
-	s.todo_list = append(s.todo_list, &pb.ToDo{
-		Id: id,
-		Title: req.Title,
-		Text: req.Text,
-	})
+	// s.todo_list = append(s.todo_list, &pb.ToDo{
+	// 	Id: id,
+	// 	Title: req.Title,
+	// 	Text: req.Text,
+	// })
 
 
 	return &pb.CreateTodoResponse{
@@ -49,27 +64,6 @@ func (s *ToDoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) 
 		Title: req.Title,
 		Text: req.Text,
 	}, nil
-}
-
-//implement getToDo
-func (s *ToDoServer) GetToDo(ctx context.Context, req *pb.GetToDoRequest) (*pb.GetToDoResponse, error) {
-	//log inside getToDo
-	log.Println("GetToDo func")
-
-	//find todo by id in todo_list
-	for _, todo := range s.todo_list.ToDos {
-		if todo.Id == req.Id {
-			return &pb.GetToDoResponse{
-				Id: todo.Id,
-				Title: todo.Title,
-				Text: todo.Text,
-			}, nil
-		}
-	}
-
-	//if not found, return error
-	return nil, fmt.Errorf("todo not found")
-
 }
 
 
